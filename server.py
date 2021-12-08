@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 from nyct_gtfs import NYCTFeed
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -34,7 +35,10 @@ def my_form_post():
         if delay_alert == False:
             result = f"The train has been running for {total} and the uptime is 1 since the total time delayed is 0"
         else:
-            result = f"The train has been running for {total}"
+            now = datetime.now()
+            delayed = now - start_time
+            uptime = 1 - (delayed/total)
+            result = f"The train has been running for {total} and delayed for {delayed} making uptime {uptime}"
     return result
 
 if __name__ == '__main__':
